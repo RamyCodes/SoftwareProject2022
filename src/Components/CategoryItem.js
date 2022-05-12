@@ -44,7 +44,7 @@ const CategoryItem = ({item}) => {
                 {item.title}
             </Title>
             <Button>
-                Buy Now
+                Browse
             </Button>
         </Info>
     </Container>
