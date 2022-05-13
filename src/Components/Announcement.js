@@ -13,8 +13,8 @@ const Container = styled.div`
 
 const Announcement = () => {
   return (
-  <Container>Welcome to Rabbit online supermarket !
-      Get your products delivered in less than 20 minutes !</Container>
+  <Container>Welcome to Rabbit online supermarket, 
+      get your products delivered in less than 20 minutes !</Container>
   );
 };
 
