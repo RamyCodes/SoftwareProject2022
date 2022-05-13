@@ -28,7 +28,7 @@ const Pay = () => {
                 console.log(err);
             }
         };
-     //   stripeToken && makeRequest
+       stripeToken && makeRequest();
     },[stripeToken]);
 
     return(
