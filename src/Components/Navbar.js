@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 const Container = styled.div`
   height: 90 px;
-  background-color: black; // or remove bc useless leTroll
+  background-color: black; // or remove bc useless
 `;
 
 const Wrapper = styled.div`
@@ -29,6 +29,7 @@ const SearchContainer = styled.div`
   padding: 5px;
   background-color: black;
   border-color: black;
+
 `;
 
 const Input = styled.input`
@@ -65,8 +66,8 @@ const Navbar = () => {
       <Wrapper>
         <Left>
           <SearchContainer>
-            <Input placeholder="Search" />
-            <Search style={{ color: "white", fontSize: 16 }} />
+            <Input placeholder="Search" style={{height: 40, width: 320}} />
+            <Search style={{ color: "white", fontSize: 26, padding: 10}} />
           </SearchContainer>
         </Left>
         <Center>
@@ -74,7 +75,6 @@ const Navbar = () => {
         </Center>
         <Right>
           <MenuItem>REGISTER</MenuItem>
-          <MenuItem>SIGN IN</MenuItem>
           <MenuItem>
           </MenuItem>
         </Right>
