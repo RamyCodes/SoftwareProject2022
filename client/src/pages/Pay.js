@@ -1,13 +1,13 @@
 import { useEffect,useState } from "react";
 import StripeCheckout from "react-stripe-checkout"
-import axios from "axios"
+import { userRequest } from "../requestMethods";
+import { useNavigate } from "react-router";
 
-const KEY ="pk_test_51Kz0mQCAdufLrSrfWGUsQ9RrhPoNSZbzvVqtkZuUTNTAP5TqUcZELqguSxM1QXfWPTPuIIx6PBZ7JV86U7wPDPrn00qaqkrqay"
-
+const KEY = process.env.REACT_APP_STRIPE;
 const Pay = () => {
     
     const[stripeToken, setStripeToken] = useState(null);
-
+    const history = useNavigate();
     const onToken = (token)=>{
         setStripeToken(token);
     };
@@ -15,21 +15,20 @@ const Pay = () => {
     useEffect(()=>{
         const makeRequest = async () =>{
             try{
-              const res = await axios.post(
-                  "http://localhost:5000/api/checkout/payment",
+              const res = await userRequest.post("/checkout/payment", 
                   {
                     tokenId: stripeToken.id,
                     amount: 200,
                   }
                 );
+                history.push("/success", {data: res.data});
                 console.log(res.data);
-                
             }catch(err){
-                console.log(err);
+                console.log(err.response.data);
             }
         };
-       stripeToken && makeRequest();
-    },[stripeToken]);
+        stripeToken && makeRequest();
+    },[stripeToken, 200, history]);
 
     return(
         <div style={{
