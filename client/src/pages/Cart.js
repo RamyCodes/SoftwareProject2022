@@ -188,7 +188,7 @@ const Cart = () => {
             <Hr />
             <Product>
               <ProductDetail>
-              <Image img src={process.env.PUBLIC_URL + '/a broccoli.jpg'} />
+              <Image img src={process.env.PUBLIC_URL + '/a_broccoli.jpg'} />
                 <Details>
                   <ProductName>
                     <b>Product:</b> Broccoli
