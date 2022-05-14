@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import React, { Component } from 'react';
-import Navbar from '../Components/Navbar'
+import Navbar from '../Components/Navbar';
 
 
 const Container = styled.div`
