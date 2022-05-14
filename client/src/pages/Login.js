@@ -4,17 +4,28 @@ import Navbar from '../Components/Navbar'
 
 
 const Container = styled.div`
-  background-image;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  // background-image;
+  // display: flex;
+  // align-items: center;
+  // justify-content: center;
+`;
+
+const Image = styled.img`
+  width: 100%;
+  height: 90vh;
+  object-fit: cover;
+`;
+
+const ImgContainer = styled.div`
+  flex: 1;
 `;
 
 const Wrapper = styled.div`
-  width: 25%;
+  width: 30%;
   padding: 20px;
   background-color: white;
- 
+  align-items: center;
+  margin-left: 500px;
 `;
 
 const Title = styled.h1`
@@ -54,9 +65,8 @@ const Link = styled.a`
 const Login = () => {
   return (
     <Container>
-      <Navbar/>
+      <Navbar/>      
       <Wrapper>
-      
         <Title>SIGN IN</Title>
         <Form>
           <Input placeholder="email" />
@@ -64,6 +74,9 @@ const Login = () => {
           <Button>SIGN IN</Button>
         </Form>
       </Wrapper>
+      <ImgContainer>
+            <Image img src={process.env.PUBLIC_URL + '/83846.jpg'} />
+          </ImgContainer>
     </Container>
   );
 };
