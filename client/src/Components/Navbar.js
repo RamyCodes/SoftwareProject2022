@@ -2,6 +2,8 @@ import { Badge } from "@material-ui/core";
 import { Search, ShoppingCartOutlined } from "@material-ui/icons";
 import React from "react";
 import styled from "styled-components";
+import {Link} from 'react-router-dom';
+
 
 const Container = styled.div`
   height: 90 px;
@@ -75,7 +77,9 @@ const Navbar = () => {
           <Logo>Rabbit</Logo>
         </Center>
         <Right>
+        <Link style={{color: "black"}} to={`/Register/`}>
           <MenuItem>REGISTER</MenuItem>
+          </Link>
           <MenuItem>
           <Badge badgeContent ={2} color="primary">
             <ShoppingCartOutlined />
