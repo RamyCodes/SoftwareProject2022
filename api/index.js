@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 dotenv.config();
 const userRoute = require("./routes/user");
+const productRoute = require("./routes/product");
 const stripeRoute = require("./routes/stripe");
 const cors = require("cors");
 
@@ -18,6 +19,7 @@ mongoose
 app.use(cors());
 app.use(express.json());
 app.use("/api/users", userRoute);
+app.use("/api/products", productRoute);
 app.use("/api/checkout", stripeRoute);
 
 app.listen(process.env.PORT || 5000, () => {
