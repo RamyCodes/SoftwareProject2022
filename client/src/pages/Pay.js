@@ -18,13 +18,13 @@ const Pay = () => {
               const res = await userRequest.post("/checkout/payment", 
                   {
                     tokenId: stripeToken.id,
-                    amount: 200,
+                    amount: 2000,
                   }
                 );
-                history.push("/success", {data: res.data});
+                history("/success");
                 console.log(res.data);
             }catch(err){
-                console.log(err.response.data);
+                console.log(err.response);
             }
         };
         stripeToken && makeRequest();
