@@ -3,6 +3,7 @@ import React from 'react'
 import Navbar from "../Components/Navbar";
 import styled from "styled-components";
 import { Add, Remove } from "@material-ui/icons";
+import {Link} from 'react-router-dom';
 
 const Container = styled.div``;
 
@@ -155,9 +156,8 @@ const Cart = () => {
         <Top>
           <TopButton>GO BACK TO CATALOG</TopButton>
           <TopTexts>
-            <TopText>LeCart(2)</TopText>
+            <TopText>Cart(2)</TopText>
           </TopTexts>
-          <TopButton type="filled">CHECKOUT NOW</TopButton>
         </Top>
         <Bottom>
           <Info>
@@ -227,7 +227,9 @@ const Cart = () => {
               <SummaryItemText>Total</SummaryItemText>
               <SummaryItemPrice>yikes</SummaryItemPrice>
             </SummaryItem>
-            <Button>CHECKOUT NOW</Button>
+            <Link style={{color: "black"}} to={`/Pay`}>
+            <TopButton style={{width: "350px"}}>CHECKOUT NOW</TopButton>
+            </Link>
           </Summary>
         </Bottom>
       </Wrapper>

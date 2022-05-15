@@ -74,17 +74,26 @@ const Navbar = () => {
           </SearchContainer>
         </Left>
         <Center>
+        <Link style={{color: "black"}} to={`/Home/`}>
+          <MenuItem>
           <Logo>Rabbit</Logo>
+          </MenuItem>
+          </Link>
         </Center>
         <Right>
-        <Link style={{color: "black"}} to={`/Register/`}>
+          <Link style={{color: "black"}} to={`/Home`}>
+          <MenuItem>HOME</MenuItem>
+          </Link>
+          <Link style={{color: "black"}} to={`/Register`}>
           <MenuItem>REGISTER</MenuItem>
           </Link>
+          <Link style={{color: "black"}} to={`/Cart`}>
           <MenuItem>
           <Badge badgeContent ={2} color="primary">
             <ShoppingCartOutlined />
           </Badge>
           </MenuItem>
+          </Link>
         </Right>
       </Wrapper>
     </Container>

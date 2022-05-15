@@ -28,7 +28,7 @@ const Pay = () => {
             }
         };
         stripeToken && makeRequest();
-    },[stripeToken, 200, history]);
+    },[stripeToken, history]);
 
     return(
         <div style={{
