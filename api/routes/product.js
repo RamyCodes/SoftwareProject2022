@@ -7,7 +7,6 @@ const router = require("express").Router();
 router.get("/", async (req, res) => {
   const qCategory = req.query.category;
   var qItem = req.query.item;
-  qItem = qItem.toLowerCase();
 
   try {
     let products;
