@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Announcement from "../Components/Announcement"
 import Navbar from "../Components/Navbar";
 import axios from "axios";
-import { Search } from "@material-ui/icons";
+import { Search, Add, Remove } from "@material-ui/icons";
 import { useState, useEffect } from "react";
 
 //document.getElementById("searchTxt").value;
@@ -124,9 +124,33 @@ function Product(){
   const [product, setProduct] = useState([]);
   const [search, setSearch] = useState("");
   const [searchButton, setSearchButton] = useState("");
+  const [quantity, setQuantity] = useState(1);
 
 const handleClick = () =>{
   setSearchButton(search.toLowerCase())
+}
+
+const button = (index) => {
+  return (
+    <div key={`buttons-${index}`}>
+      <button
+        key={`hello-${index}`}
+      >
+        hello{index}
+      </button>
+    </div>
+  );
+};
+
+const handleQuantity = (type, search) =>{
+  if(search === "")
+  return;
+  if(type === "dec"){
+   quantity > 1 && setQuantity(quantity - 1);
+  }
+  else{
+    setQuantity(quantity + 1);
+  }
 }
 
   useEffect(()=> {
@@ -167,13 +191,18 @@ const handleClick = () =>{
             <br/>
             <br/><br/><br/>
         <Title>  item name: {product.item} </Title>
-        <Title> item price: {product.price} </Title>
-        <Title> item availability: {product.availability} </Title>
+        <Title> item price: EGP {product.price} </Title>
+        <Title> item availability: {product.availability.toString()} </Title>
          <Title> item category: {product.category} </Title>
            <br/>
+           <AmountContainer>
+              <Remove id={product.item + "-remove"} onClick={() => handleQuantity("dec", search)} />
+              <Amount id={product.item + "-amount"} >{quantity}</Amount>
+              <Add id={product.item + "-add"} onClick={() => handleQuantity("inc", search)} />
+            </AmountContainer>
            <br/>
         <AddContainer>
-        <Button>ADD TO CART</Button>
+        <Button id={product.item + "-button"}>ADD TO CART</Button>
       </AddContainer>
       </div>)
          
