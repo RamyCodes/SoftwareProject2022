@@ -3,11 +3,23 @@ import styled from "styled-components";
 import Announcement from "../Components/Announcement"
 import Navbar from "../Components/Navbar";
 import axios from "axios";
+import { Search } from "@material-ui/icons";
 import { useState, useEffect } from "react";
 
 //document.getElementById("searchTxt").value;
 
 const Container = styled.div``;
+
+const SearchContainer = styled.div`
+  border: 0.5px solid lightgray;
+  display: flex;
+  align-items: center;
+  margin-left: 0px;
+  padding: 5px;
+  background-color: green;
+  border-color: black;
+
+`;
 
 const Wrapper = styled.div`
   padding: 50px;
@@ -101,21 +113,24 @@ const Amount = styled.span`
 
 const Button = styled.button`
   padding: 15px;
-  border: 2px solid teal;
-  background-color: white;
   cursor: pointer;
   font-weight: 500;
-
-  &:hover {
-    background-color: #f8f4f4;
-  }
+  background-color: green;
+  border: green;
+  color: white;
 `;
 
 function Product(){
-  const [product, setProduct] = useState([])
+  const [product, setProduct] = useState([]);
+  const [search, setSearch] = useState("");
+  const [searchButton, setSearchButton] = useState("");
+
+const handleClick = () =>{
+  setSearchButton(search.toLowerCase())
+}
 
   useEffect(()=> {
-    axios.get('http://localhost:5000/api/products')
+    axios.get(`http://localhost:5000/api/products?item=${searchButton}`)
         .then( res => {
           console.log(res)
           setProduct(res.data)
@@ -124,17 +139,23 @@ function Product(){
           console.log(err)
         })
         
-    },[])
+    },[searchButton])
   
   return(
     <Container>
     <Navbar />
-    <Announcement />
+    <SearchContainer>
+            <input type="text" value={search} onChange={e => setSearch(e.target.value)} placeholder="Search" style={{height: 40, width: 320}} />
+            <Button type = "button" onClick={handleClick} id="buttonTxt">
+            <Search style={{ color: "white", fontSize: 26, padding: 10}} />
+            </Button>
+          </SearchContainer>
     <Wrapper>
       <ImgContainer>
 
       </ImgContainer>
       <InfoContainer>
+     
               <h1> Fetched data from Product api: </h1>  {
               
     <div>
@@ -143,11 +164,14 @@ function Product(){
           product.map(product => 
             <div>
             <br/>
+            <br/>
+            <br/><br/><br/>
         <Title>  item name: {product.item} </Title>
-        <Price> item price: {product.price} </Price>
-        <Price> item availability: {product.availability} </Price>
-         <Desc> item category: {product.category} </Desc>
-           
+        <Title> item price: {product.price} </Title>
+        <Title> item availability: {product.availability} </Title>
+         <Title> item category: {product.category} </Title>
+           <br/>
+           <br/>
         <AddContainer>
         <Button>ADD TO CART</Button>
       </AddContainer>
