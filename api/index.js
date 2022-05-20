@@ -6,6 +6,7 @@ dotenv.config();
 const userRoute = require("./routes/user");
 const productRoute = require("./routes/product");
 const stripeRoute = require("./routes/stripe");
+const orderRoute = require("./routes/order");
 const cors = require("cors");
 
 
@@ -20,6 +21,7 @@ app.use(cors());
 app.use(express.json());
 app.use("/api/users", userRoute);
 app.use("/api/products", productRoute);
+app.use("/api/orders", orderRoute);
 app.use("/api/checkout", stripeRoute);
 
 app.listen(process.env.PORT || 5000, () => {
