@@ -2,6 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import Announcement from "../Components/Announcement"
 import Navbar from "../Components/Navbar";
+import axios from "axios";
+import { useState, useEffect } from "react";
 
 //document.getElementById("searchTxt").value;
 
@@ -109,22 +111,75 @@ const Button = styled.button`
   }
 `;
 
-class Product extends React.Component {
-   
-    // Constructor 
-    constructor(props) {
-        super(props);
-   
-        this.state = {
-            items: [],
-            DataisLoaded: false
-        };
-    }
-   
-    // ComponentDidMount is used to
-    // execute the code 
-    componentDidMount() {
-        fetch(
+function Product(){
+  const [product, setProduct] = useState([])
+
+  useEffect(()=> {
+    axios.get('http://localhost:5000/api/products')
+        .then( res => {
+          console.log(res)
+          setProduct(res.data)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+        
+    },[])
+  
+  return(
+    <Container>
+    <Navbar />
+    <Announcement />
+    <Wrapper>
+      <ImgContainer>
+
+      </ImgContainer>
+      <InfoContainer>
+              <h1> Fetched data from Product api: </h1>  {
+              
+    <div>
+      <ul>
+        {
+          product.map(product => 
+            <div>
+            <br/>
+        <Title>  item name: {product.item} </Title>
+        <Price> item price: {product.price} </Price>
+        <Price> item availability: {product.availability} </Price>
+         <Desc> item category: {product.category} </Desc>
+           
+        <AddContainer>
+        <Button>ADD TO CART</Button>
+      </AddContainer>
+      </div>)
+         
+        }
+      </ul>
+    </div>
+              
+          }
+        
+      </InfoContainer>
+    </Wrapper>
+  </Container>
+
+    // <div>
+    //   <ul>
+    //     {
+    //       product.map(product => <li key = {product._id}>{product.item}</li>)
+    //     }
+    //   </ul>
+    // </div>
+      
+      
+  )
+}
+
+
+    /*
+
+    useEffect(()=>{
+      fetch(
 "http://localhost:5000/api/products?item=")
             .then((res) => res.json())
             .then((json) => {
@@ -133,54 +188,7 @@ class Product extends React.Component {
                     DataisLoaded: true
                 });
             })
-    }
-    render() {
-        const { DataisLoaded, items } = this.state;
-        if (!DataisLoaded) return <div>
-            <h1> Fetching... </h1> </div> ;
-   
-        return (
-            <Container>
-      <Navbar />
-      <Announcement />
-      <Wrapper>
-        <ImgContainer>
-
-        </ImgContainer>
-        <InfoContainer>
-                <h1> Fetched data from Product api: </h1>  {
-                items.map((item) => ( 
-                    <div>
-                        <br/>
-                    <Title>  item name: {item.item} </Title>
-                    <Price> item price: {item.price} </Price>
-                    <Price> item availability: {item.availability} </Price>
-                     <Desc> item category: {item.category} </Desc>
-                       
-                    <AddContainer>
-                    <Button>ADD TO CART</Button>
-                  </AddContainer>
-                  </div>
-                ))
-            }
-          
-        </InfoContainer>
-      </Wrapper>
-    </Container>
-        // <div className = "Product">
-        //     <h1> Fetched data from Product api: </h1>  {
-        //         items.map((item) => ( 
-        //         <ol><br/>
-        //             item name: {item.item},
-        //             item price: {item.price},
-        //             item category: {item.category},
-        //             item availability: {item.availability},
-        //             </ol>
-        //         ))
-        //     }
-        // </div>
-    );
-}
-}
-   
+    }, [])
+    */
+    
 export default Product;

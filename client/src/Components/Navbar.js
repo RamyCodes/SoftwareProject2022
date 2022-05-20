@@ -3,7 +3,7 @@ import { Search, ShoppingCartOutlined } from "@material-ui/icons";
 import React from "react";
 import styled from "styled-components";
 import {Link} from 'react-router-dom';
-
+import { useState } from "react";
 
 const Container = styled.div`
   height: 90 px;
@@ -63,13 +63,20 @@ const MenuItem = styled.div`
   color: white;
 `;
 
+export function getText(){
+  return document.getElementById("searchTxt").value;  
+}
+
 const Navbar = () => {
+
+  const [search, setSearch] = useState('');
+
   return (
     <Container>
       <Wrapper>
         <Left>
           <SearchContainer>
-            <input id = "searchTxt" placeholder="Search" style={{height: 40, width: 320}} />
+            <input id = "searchTxt" value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search" style={{height: 40, width: 320}} />
             <Button id="buttonTxt">
             <Search style={{ color: "white", fontSize: 26, padding: 10}} />
             </Button>
