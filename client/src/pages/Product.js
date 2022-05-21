@@ -98,18 +98,18 @@ const handleClick = () =>{
 }
 
 const handleCart = ()=>{
-  if(product.length == 0 | product.length > 1)
+  if(product.length === 0 | product.length > 1)
   return(alert("Please select a valid product first by searching for it !"));
   if(!product[0].availability)
   return(alert("Item is currently not available !"));
   dispatch(
-  addProduct({ product, price: product[0].price*quantity, quantity, total:  product.forEach.price*quantity})
+  addProduct({ product, item: product[0].item, img: product[0].img, price: product[0].price*quantity, quantity, total:  product.forEach.price*quantity})
   )
   alert("Added to cart successfully !");
 }
 
 const handleQuantity = (type, search) =>{
-  if(product.length == 0 | product.length > 1)
+  if(product.length === 0 | product.length > 1)
   return(alert("Please select a valid product first by searching for it !"));
   if(!product[0].availability)
   return(alert("Item is currently not available !"));

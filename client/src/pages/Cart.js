@@ -4,6 +4,13 @@ import Navbar from "../Components/Navbar";
 import styled from "styled-components";
 import { Add, Remove } from "@material-ui/icons";
 import {Link} from 'react-router-dom';
+import { useSelector } from "react-redux";
+import { useEffect, useState} from "react";
+import StripeCheckout from "react-stripe-checkout";
+import { userRequest } from "../requestMethods";
+import { useNavigate } from 'react-router';
+
+const KEY = process.env.REACT_APP_STRIPE;
 
 const Container = styled.div``;
 
@@ -28,9 +35,8 @@ const TopButton = styled.button`
   font-weight: 600;
   cursor: pointer;
   border: ${(props) => props.type === "filled" && "none"};
-  background-color: ${(props) =>
-    props.type === "filled" ? "green" : "transparent"};
-  color: ${(props) => props.type === "filled" && "white"};
+  background-color: black;
+  color: black;
 `;
 
 const TopTexts = styled.div`
@@ -73,14 +79,6 @@ const Details = styled.div`
 
 const ProductName = styled.span``;
 
-const ProductId = styled.span``;
-
-const ProductColor = styled.div`
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background-color: ${(props) => props.color};
-`;
 
 const ProductSize = styled.span``;
 
@@ -147,6 +145,29 @@ const Button = styled.button`
 `;
 
 const Cart = () => {
+  const cart = useSelector(state => state.cart)
+  const [stripeToken, setStripeToken] = useState(null);
+  const history = useNavigate();
+  const onToken = (token) => {
+    setStripeToken(token);
+  };
+  console.log(stripeToken);
+
+  useEffect(() => {
+    const makeRequest = async () => {
+      try {
+        const res = await userRequest.post("/checkout/payment", {
+          tokenId: stripeToken.id,
+          amount: cart.total * 100,
+        });
+        history("/success");
+      } catch(err){
+        console.log(err.response);
+    }
+    };
+    stripeToken && makeRequest();
+  }, [stripeToken, history]);
+
   return (
     <Container>
       <Navbar />
@@ -154,82 +175,71 @@ const Cart = () => {
       <Wrapper>
         <Title>Your cart</Title>
         <Top>
-          <TopButton>GO BACK TO CATALOG</TopButton>
-          <TopTexts>
-            <TopText>Cart(2)</TopText>
-          </TopTexts>
+        <Link style={{color: "white", background: "black"}} to={`/Product`}>
+          <TopButton style={{color: "white"}}>GO BACK TO CATALOG</TopButton>
+          </Link>
         </Top>
         <Bottom>
           <Info>
-            <Product>
-              <ProductDetail>
-              <Image img src={process.env.PUBLIC_URL + '/tomates.jpeg'} />
-                <Details>
-                  <ProductName>
-                    <b>Product:</b> Tomatoes
-                  </ProductName>
-                  <ProductId>
-                    <b>ID:</b> 93813718293
-                  </ProductId>
-                  <ProductSize>
-                    <b>Quantity:</b> 2.0kg
-                  </ProductSize>
-                </Details>
-              </ProductDetail>
-              <PriceDetail>
-                <ProductAmountContainer>
-                  <Add />
-                  <ProductAmount>2</ProductAmount>
-                  <Remove />
-                </ProductAmountContainer>
-                <ProductPrice>10 EGP</ProductPrice>
-              </PriceDetail>
-            </Product>
             <Hr />
-            <Product>
-              <ProductDetail>
-              <Image img src={process.env.PUBLIC_URL + '/a_broccoli.jpg'} />
-                <Details>
-                  <ProductName>
-                    <b>Product:</b> Broccoli
-                  </ProductName>
-                  <ProductId>
-                    <b>ID:</b> 93813718293
-                  </ProductId>
-                  <ProductSize>
-                    <b>Quantity:</b> 1.5kg
-                  </ProductSize>
-                </Details>
-              </ProductDetail>
-              <PriceDetail>
-                <ProductAmountContainer>
-                  <Add />
-                  <ProductAmount>1</ProductAmount>
-                  <Remove />
-                </ProductAmountContainer>
-                <ProductPrice>30 EGP</ProductPrice>
-              </PriceDetail>
-            </Product>
+
+          {cart.products.map(product=>(<Product>
+            <ProductDetail>
+            <Image img src={product.img} />
+              <Details>
+                <ProductName>
+                  <b>Product:</b> {product.item}
+                </ProductName>
+                <ProductSize>
+                  <b>Quantity:</b> {product.quantity}
+                </ProductSize>
+              </Details>
+            </ProductDetail>
+            <PriceDetail>
+              <ProductAmountContainer>
+                <Add />
+                <ProductAmount>{product.quantity}</ProductAmount>
+                <Remove />
+              </ProductAmountContainer>
+              <ProductPrice>{product.price} EGP</ProductPrice>
+            </PriceDetail>
+          </Product>
+          ))}
+            <Hr/>
           </Info>
           <Summary>
-            <SummaryTitle>LeDetails</SummaryTitle>
+            <SummaryTitle>Order Details</SummaryTitle>
             <SummaryItem>
               <SummaryItemText>Subtotal</SummaryItemText>
-              <SummaryItemPrice>quick math</SummaryItemPrice>
+              <SummaryItemPrice>{cart.total.toFixed(2)} EGP</SummaryItemPrice>
             </SummaryItem>
             <SummaryItem>
               <SummaryItemText>Estimated Shipping</SummaryItemText>
-              <SummaryItemPrice>FREE!</SummaryItemPrice>
+              <SummaryItemPrice>0 EGP</SummaryItemPrice>
             </SummaryItem>
             <SummaryItem>
             </SummaryItem>
             <SummaryItem type="total">
+              <b>
               <SummaryItemText>Total</SummaryItemText>
-              <SummaryItemPrice>yikes</SummaryItemPrice>
+              </b>
+              <b>
+              <SummaryItemPrice>{cart.total.toFixed(2)} EGP</SummaryItemPrice>
+              </b>
+              
             </SummaryItem>
-            <Link style={{color: "black"}} to={`/Pay`}>
-            <TopButton style={{width: "350px"}}>CHECKOUT NOW</TopButton>
-            </Link>
+            <StripeCheckout 
+          name= "Rabbit supermarket"
+          image=""
+          billingAddress
+          shippingAddress
+          description = {`Total amount to be paid: ${(cart.total).toFixed(2)} EGP`}
+          amount={cart.total}
+          token={onToken}
+          stripeKey={KEY}
+          >
+            <TopButton style={{width: "350px", color: "white"}}>CHECKOUT NOW</TopButton>
+            </StripeCheckout>
           </Summary>
         </Bottom>
       </Wrapper>

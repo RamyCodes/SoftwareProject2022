@@ -1,5 +1,6 @@
 import {Link} from 'react-router-dom';
 import styled from "styled-components";
+import { useLocation } from 'react-router';
 
 const Container = styled.div`
   height: 90 px;
@@ -7,7 +8,9 @@ const Container = styled.div`
 `;
 
 const Success = () => {
+  const location = useLocation();
 
+  console.log(location);
   return (
     <Container>
     <div
