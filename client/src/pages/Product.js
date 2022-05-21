@@ -5,6 +5,8 @@ import Navbar from "../Components/Navbar";
 import axios from "axios";
 import { Search, Add, Remove } from "@material-ui/icons";
 import { useState, useEffect } from "react";
+import { addProduct } from "../redux/cartRedux";
+import { useDispatch } from "react-redux";
 
 //document.getElementById("searchTxt").value;
 
@@ -88,29 +90,32 @@ function Product(){
   const [search, setSearch] = useState("");
   const [searchButton, setSearchButton] = useState("");
   const [quantity, setQuantity] = useState(1);
+  const dispatch = useDispatch();
 
 const handleClick = () =>{
+  setQuantity(1);
   setSearchButton(search.toLowerCase())
 }
 
-const button = (index) => {
-  return (
-    <div key={`buttons-${index}`}>
-      <button
-        key={`hello-${index}`}
-      >
-        hello{index}
-      </button>
-    </div>
-  );
-};
+const handleCart = ()=>{
+  if(product.length == 0 | product.length > 1)
+  return(alert("Please select a valid product first by searching for it !"));
+  if(!product[0].availability)
+  return(alert("Item is currently not available !"));
+  dispatch(
+  addProduct({product, quantity})
+  )
+  alert("Added to cart successfully !");
+}
 
 const handleQuantity = (type, search) =>{
+  if(product.length == 0 | product.length > 1)
+  return(alert("Please select a valid product first by searching for it !"));
+  if(!product[0].availability)
+  return(alert("Item is currently not available !"));
   if(type === "dec"){
    quantity > 1 && setQuantity(quantity - 1);
   }
-  else if(search === "")
-  return;
   else{
     setQuantity(quantity + 1);
   }
@@ -144,7 +149,7 @@ const handleQuantity = (type, search) =>{
       <InfoContainer>
      
       
-        <Button id={"AddtoCart-button"} style={{font: "100px", marginleft: 100}}>ADD TO CART</Button>
+        <Button id={"AddtoCart-button"} onClick={handleCart} style={{font: "100px", marginleft: 100}}>ADD TO CART</Button>
        {
               
     <div>
@@ -156,19 +161,19 @@ const handleQuantity = (type, search) =>{
             <br/>
             <br/><br/><h1> Product {index +1}</h1><br/>
             
-        <Title>  item name: {product.item} </Title>
-        <Title> item price: EGP {product.price} </Title>
-        <Title> item availability: {product.availability.toString()} </Title>
-         <Title> item category: {product.category} </Title>
+        <Title key={product.item}>  item name: {product.item} </Title>
+        <Title key={product.price}> item price: EGP {product.price} </Title>
+        <Title > item availability: {product.availability.toString()} </Title>
+         <Title > item category: {product.category} </Title>
          <br/> <br/>
          <ImgContainer>
-         <Image src={product.img}/>
+         <Image key={product.img} src={product.img}/>
          </ImgContainer>
            <br/>
            <AmountContainer>
-              <Remove id={product.item + "-remove"} onClick={() => handleQuantity("dec", search)} />
-              <Amount id={product.item + "-amount"} >{quantity}</Amount>
-              <Add id={product.item + "-add"} onClick={() => handleQuantity("inc", search)} />
+              <Remove key={product.item + "-remove"} onClick={() => handleQuantity("dec", search)} />
+              <Amount key={product.item}>{quantity}</Amount>
+              <Add key={product.item+ "-add"} onClick={() => handleQuantity("inc", search)} />
             </AmountContainer>
            <br/>
       </div>)
