@@ -143,11 +143,11 @@ const button = (index) => {
 };
 
 const handleQuantity = (type, search) =>{
-  if(search === "")
-  return;
   if(type === "dec"){
    quantity > 1 && setQuantity(quantity - 1);
   }
+  else if(search === "")
+  return;
   else{
     setQuantity(quantity + 1);
   }
