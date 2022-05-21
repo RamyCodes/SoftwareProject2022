@@ -53,6 +53,8 @@ const AddContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-left: 180px;
+  margin-top: 100px;
 `;
 
 const AmountContainer = styled.div`
@@ -130,16 +132,20 @@ const handleQuantity = (type, search) =>{
     <Container>
     <Navbar />
     <SearchContainer>
-            <input type="text" value={search} onChange={e => setSearch(e.target.value)} placeholder="Search" style={{height: 40, width: 320}} />
+            <input type="text" value={search} onChange={e => setSearch(e.target.value)} placeholder="Search / Select" style={{height: 40, width: 320}} />
             <Button type = "button" onClick={handleClick} id="buttonTxt">
             <Search style={{ color: "white", fontSize: 26, padding: 10}} />
             </Button>
           </SearchContainer>
+          
+          
     <Wrapper>
 
       <InfoContainer>
      
-              <h1> Fetched data from Product api: </h1>  {
+      
+        <Button id={"AddtoCart-button"} style={{font: "100px", marginleft: 100}}>ADD TO CART</Button>
+       {
               
     <div>
       <ul>
@@ -148,7 +154,7 @@ const handleQuantity = (type, search) =>{
             <div>
             <br/>
             <br/>
-            <br/><br/><h1> Product {index +1}</h1><br/><br/>
+            <br/><br/><h1> Product {index +1}</h1><br/>
             
         <Title>  item name: {product.item} </Title>
         <Title> item price: EGP {product.price} </Title>
@@ -165,9 +171,6 @@ const handleQuantity = (type, search) =>{
               <Add id={product.item + "-add"} onClick={() => handleQuantity("inc", search)} />
             </AmountContainer>
            <br/>
-        <AddContainer>
-        <Button id={product.item + "-button"}>ADD TO CART</Button>
-      </AddContainer>
       </div>)
          
         }
