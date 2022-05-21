@@ -31,9 +31,10 @@ const ImgContainer = styled.div`
 `;
 
 const Image = styled.img`
-  width: 100%;
-  height: 90vh;
+  width: 30%;
+  height: 30vh;
   object-fit: cover;
+  margin-right: 20px;
 `;
 
 const InfoContainer = styled.div`
@@ -43,49 +44,9 @@ const InfoContainer = styled.div`
 
 const Title = styled.h1`
   font-weight: 200;
+
 `;
 
-const Desc = styled.p`
-  margin: 20px 0px;
-`;
-
-const Price = styled.span`
-  font-weight: 100;
-  font-size: 40px;
-`;
-
-const FilterContainer = styled.div`
-  width: 50%;
-  margin: 30px 0px;
-  display: flex;
-  justify-content: space-between;
-`;
-
-const Filter = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
-const FilterTitle = styled.span`
-  font-size: 20px;
-  font-weight: 200;
-`;
-
-const FilterColor = styled.div`
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background-color: ${(props) => props.color};
-  margin: 0px 5px;
-  cursor: pointer;
-`;
-
-const FilterSize = styled.select`
-  margin-left: 10px;
-  padding: 5px;
-`;
-
-const FilterSizeOption = styled.option``;
 
 const AddContainer = styled.div`
   width: 50%;
@@ -175,9 +136,7 @@ const handleQuantity = (type, search) =>{
             </Button>
           </SearchContainer>
     <Wrapper>
-      <ImgContainer>
 
-      </ImgContainer>
       <InfoContainer>
      
               <h1> Fetched data from Product api: </h1>  {
@@ -185,15 +144,20 @@ const handleQuantity = (type, search) =>{
     <div>
       <ul>
         {
-          product.map(product => 
+          product.map((product, index) => 
             <div>
             <br/>
             <br/>
-            <br/><br/><br/>
+            <br/><br/><h1> Product {index +1}</h1><br/><br/>
+            
         <Title>  item name: {product.item} </Title>
         <Title> item price: EGP {product.price} </Title>
         <Title> item availability: {product.availability.toString()} </Title>
          <Title> item category: {product.category} </Title>
+         <br/> <br/>
+         <ImgContainer>
+         <Image src={product.img}/>
+         </ImgContainer>
            <br/>
            <AmountContainer>
               <Remove id={product.item + "-remove"} onClick={() => handleQuantity("dec", search)} />
