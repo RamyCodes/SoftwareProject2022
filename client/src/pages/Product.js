@@ -103,7 +103,7 @@ const handleCart = ()=>{
   if(!product[0].availability)
   return(alert("Item is currently not available !"));
   dispatch(
-  addProduct({product, quantity})
+  addProduct({ product, price: product[0].price*quantity, quantity, total:  product.forEach.price*quantity})
   )
   alert("Added to cart successfully !");
 }
@@ -162,15 +162,16 @@ const handleQuantity = (type, search) =>{
             <br/><br/><h1> Product {index +1}</h1><br/>
             
         <Title key={product.item}>  item name: {product.item} </Title>
-        <Title key={product.price}> item price: EGP {product.price} </Title>
-        <Title > item availability: {product.availability.toString()} </Title>
-         <Title > item category: {product.category} </Title>
+        <Title key={product.price + index +2}> item price: EGP {product.price} </Title>
+        <Title key={product.price + index +3}> item availability: {product.availability.toString()} </Title>
+         <Title key={product.price + index +4}> item category: {product.category} </Title>
+         <Title key={product.price + index +5}> cumulative price: EGP {product.price * quantity} </Title>
          <br/> <br/>
-         <ImgContainer>
+         <ImgContainer key={product.img +"container"}>
          <Image key={product.img} src={product.img}/>
          </ImgContainer>
            <br/>
-           <AmountContainer>
+           <AmountContainer key= {product.img +"Amount"}>
               <Remove key={product.item + "-remove"} onClick={() => handleQuantity("dec", search)} />
               <Amount key={product.item}>{quantity}</Amount>
               <Add key={product.item+ "-add"} onClick={() => handleQuantity("inc", search)} />
