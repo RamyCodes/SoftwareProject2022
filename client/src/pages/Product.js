@@ -18,7 +18,7 @@ const SearchContainer = styled.div`
   align-items: center;
   margin-left: 0px;
   padding: 5px;
-  background-color: green;
+  background-color: blue;
   border-color: black;
 
 `;
@@ -42,6 +42,7 @@ const Image = styled.img`
 const InfoContainer = styled.div`
   flex: 1;
   padding: 0px 50px;
+  margin-left: 200px;
 `;
 
 const Title = styled.h1`
@@ -80,9 +81,10 @@ const Button = styled.button`
   padding: 15px;
   cursor: pointer;
   font-weight: 500;
-  background-color: green;
-  border: green;
+  background-color: blue;
+  border: blue;
   color: white;
+  margin-left: 10px;
 `;
 
 function Product(){
@@ -137,19 +139,17 @@ const handleQuantity = (type, search) =>{
     <Container>
     <Navbar />
     <SearchContainer>
-            <input type="text" value={search} onChange={e => setSearch(e.target.value)} placeholder="Search / Select" style={{height: 40, width: 320}} />
+            <input type="text" value={search} onChange={e => setSearch(e.target.value)} placeholder="Search / Select" style={{height: 40, width: 320, marginLeft: 600}} />
             <Button type = "button" onClick={handleClick} id="buttonTxt">
-            <Search style={{ color: "white", fontSize: 26, padding: 10}} />
+            <Search style={{ color: "white", fontSize: 26, padding: 10, backgroundColor: "blue"}} />
             </Button>
           </SearchContainer>
           
           
     <Wrapper>
-
+    
       <InfoContainer>
-     
-      
-        <Button id={"AddtoCart-button"} onClick={handleCart} style={{font: "100px", marginleft: 100}}>ADD TO CART</Button>
+      <Button id={"AddtoCart-button"} onClick={handleCart} style={{font: "100px",  marginLeft: 400, backgroundColor: "black"}}>ADD TO CART</Button>
        {
               
     <div>
@@ -159,6 +159,7 @@ const handleQuantity = (type, search) =>{
             <div>
             <br/>
             <br/>
+            <hr size="2" width="90%" color="black"/>
             <br/><br/><h1> Product {index +1}</h1><br/>
             
         <Title key={product.item}>  item name: {product.item} </Title>

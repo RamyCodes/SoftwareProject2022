@@ -1,55 +1,45 @@
+import { useEffect, useState } from "react";
 import styled from "styled-components";
+import Product from "./Product";
+import axios from "axios";
 
 const Container = styled.div`
-    display: flex;
-    padding: 60px;
-    justify-content: space-between;
-    background-color: darkgreen;
-`;
-
-const Title = styled.h1`
-  margin: 20px;
-`;
-
-const FilterContainer = styled.div`
+  padding: 20px;
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
+  background-color: black;
 `;
 
-const Filter = styled.div`
-  margin: 20px;
-`;
+const Products = ({ cat, filters, sort }) => {
+  const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
 
-const FilterText = styled.span`
-  font-size: 20px;
-  font-weight: 600;
-  margin-right: 20px;
-  color: white;
-`;
-
-const Select = styled.select`
-  padding: 10px;
-  margin-right: 20px;
-`;
-const Option = styled.option``;
-
-const ProductList = () => {
+  useEffect(() => {
+    const getProducts = async () => {
+      try {
+        const res = await axios.get(
+          cat
+            ? `http://localhost:5000/api/products?category=${cat}`
+            : "http://localhost:5000/api/products"
+        );
+        setProducts(res.data);
+      } catch (err) {}
+    };
+    getProducts();
+  }, [cat]);
 
 
   return (
     <Container>
-      <FilterContainer>
-        <Filter>
-          <FilterText>Sort Products:</FilterText>
-          <Select>
-            <Option value="newest">Newest</Option>
-            <Option value="asc">Price (asc)</Option>
-            <Option value="desc">Price (desc)</Option>
-          </Select>
-        </Filter>
-      </FilterContainer>
+          <h1 style={{color: "white"}}>Top products</h1>
+      {cat
+        ? filteredProducts.map((item) => <Product item={item} key={item.id} />)
+        : products
+            .slice(0,3)
+            .map((item) => <Product item={item} key={item.id} />)}
     </Container>
   );
 };
 
-export default ProductList;
+export default Products;
