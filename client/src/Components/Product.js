@@ -68,7 +68,6 @@ import {
   const Product = ({ item }) => {
     return (
       <Container>
-        <Circle />
         <Image src={item.img} />
         <Info>
           <Icon>

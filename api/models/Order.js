@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 
 const OrderSchema = new mongoose.Schema(
   {
-    token: {type: String, required: true},
     products: [
       {
         item: {

@@ -30,6 +30,7 @@ const Wrapper = styled.div`
 
 const ImgContainer = styled.div`
   flex: 1;
+  display: flex;
 `;
 
 const Image = styled.img`
@@ -37,12 +38,12 @@ const Image = styled.img`
   height: 30vh;
   object-fit: cover;
   margin-right: 20px;
+  display: flex;
 `;
 
 const InfoContainer = styled.div`
   flex: 1;
   padding: 0px 50px;
-  margin-left: 200px;
 `;
 
 const Title = styled.h1`
@@ -149,7 +150,7 @@ const handleQuantity = (type, search) =>{
     <Wrapper>
     
       <InfoContainer>
-      <Button id={"AddtoCart-button"} onClick={handleCart} style={{font: "100px",  marginLeft: 400, backgroundColor: "black"}}>ADD TO CART</Button>
+      <Button id={"AddtoCart-button"} onClick={handleCart} style={{font: "100px",  marginLeft: 600, backgroundColor: "black"}}>ADD TO CART</Button>
        {
               
     <div>
@@ -161,23 +162,25 @@ const handleQuantity = (type, search) =>{
             <br/>
             <hr size="2" width="90%" color="black"/>
             <br/><br/><h1> Product {index +1}</h1><br/>
-            
-        <Title key={product.item}>  item name: {product.item} </Title>
-        <Title key={product.price + index +2}> item price: EGP {product.price} </Title>
-        <Title key={product.price + index +3}> item availability: {product.availability.toString()} </Title>
-         <Title key={product.price + index +4}> item category: {product.category} </Title>
-         <Title key={product.price + index +5}> cumulative price: EGP {product.price * quantity} </Title>
-         <br/> <br/>
-         <ImgContainer key={product.img +"container"}>
-         <Image key={product.img} src={product.img}/>
-         </ImgContainer>
-           <br/>
-           <AmountContainer key= {product.img +"Amount"}>
-              <Remove key={product.item + "-remove"} onClick={() => handleQuantity("dec", search)} />
-              <Amount key={product.item}>{quantity}</Amount>
-              <Add key={product.item+ "-add"} onClick={() => handleQuantity("inc", search)} />
-            </AmountContainer>
-           <br/>
+        <div style={{display: "flex", justifyContent: "space-between"}}> 
+          <div>
+            <Title key={product.item}>   name: {product.item} </Title>
+            <Title key={product.price + index +2}>  price: EGP {product.price} </Title>
+            <Title key={product.price + index +3}>  availability: {product.availability.toString()} </Title>
+            <Title key={product.price + index +4}> category: {product.category} </Title>
+            <Title key={product.price + index +5}> cumulative price: EGP {product.price * quantity} </Title>
+          </div>
+          <div>
+              <img style={{height: "250px"}} key={product.img} src={product.img}/>
+          </div>
+        </div>
+          <br/>
+          <AmountContainer key= {product.img +"Amount"}>
+            <Remove key={product.item + "-remove"} onClick={() => handleQuantity("dec", search)} />
+            <Amount key={product.item}>{quantity}</Amount>
+            <Add key={product.item+ "-add"} onClick={() => handleQuantity("inc", search)} />
+          </AmountContainer>
+          <br/>
       </div>)
          
         }
