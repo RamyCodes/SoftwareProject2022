@@ -29,11 +29,18 @@ const Success = () => {
         </div>
 
       {
+        <div>
         <Link style={{color: "black"}} to={`/Home`}>
       <button style={{ color: 'white', background: 'black', height: 100, width: 200, fontSize: 20, padding: 10, marginTop: 20 }}>Go to Homepage</button>
       </Link>
+       <Link style={{color: "black"}} to={`/Order`}>
+       <button style={{ marginLeft: 20, color: 'white', background: 'black', height: 100, width: 200, fontSize: 20, padding: 10, marginTop: 20 }}>CHECK ORDER</button>
+       </Link>
+       </div>
         }
-
+      {
+             
+      }
     </div>
     </Container>
   );

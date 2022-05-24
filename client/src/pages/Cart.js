@@ -152,6 +152,7 @@ const Cart = () => {
     setStripeToken(token);
   };
   console.log(stripeToken);
+  let paid = false;
 
   useEffect(() => {
     const makeRequest = async () => {
@@ -161,6 +162,7 @@ const Cart = () => {
           amount: cart.total * 100,
         });
         history("/success");
+        paid = true;
       } catch(err){
         console.log(err.response);
     }

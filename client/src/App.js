@@ -11,6 +11,7 @@ import Login from "./pages/Login";
 import Cart from "./pages/Cart";
 import Register from "./pages/Register";
 import Product from "./pages/Product";
+import Order from "./pages/Order";
 
 const App = () => {
   
@@ -24,6 +25,7 @@ const App = () => {
         <Route path="/Register" element={<Register/>} />
         <Route path="/Success" element={<Success/>} />
         <Route path="/Pay" element={<Pay/>} />
+        <Route path="/Order" element={<Order/>} />
         <Route path="*" element={<Navigate to="/"/>} />
       </Routes>
     </Router>
