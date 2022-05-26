@@ -8,7 +8,8 @@ import { useSelector } from "react-redux";
 import { useEffect, useState} from "react";
 import StripeCheckout from "react-stripe-checkout";
 import { userRequest } from "../requestMethods";
-import { useNavigate } from 'react-router';
+import {useNavigate} from 'react-router-dom';
+
 
 const KEY = process.env.REACT_APP_STRIPE;
 
@@ -145,14 +146,31 @@ const Button = styled.button`
 `;
 
 const Cart = () => {
-  const cart = useSelector(state => state.cart)
+  const cart = useSelector((state) => state.cart)
   const [stripeToken, setStripeToken] = useState(null);
-  const history = useNavigate();
+  const navigate = useNavigate();
   const onToken = (token) => {
     setStripeToken(token);
   };
   console.log(stripeToken);
-  let paid = false;
+  let address = "";
+  let tokken = "";
+
+  const createOrder = async () => {
+    try {
+      const res = await userRequest.post("/orders", {
+        products: cart.products.map((item) => ({
+          item: item.item,
+          quantity: item.quantity,
+        })),
+        amount: cart.total,
+        address: address
+      });
+      console.log("inside create order " + address)
+    } catch (err){
+      console.log(err.response);
+  }
+  };
 
   useEffect(() => {
     const makeRequest = async () => {
@@ -161,14 +179,16 @@ const Cart = () => {
           tokenId: stripeToken.id,
           amount: cart.total * 100,
         });
-        history("/success");
-        paid = true;
+        navigate("/success", {state: {stripeData: res.data, products: cart}});
+        address = res.data.source.address_line1
+        console.log(res.data.payment_method)
+        createOrder();
       } catch(err){
         console.log(err.response);
     }
     };
     stripeToken && makeRequest();
-  }, [stripeToken, history]);
+  }, [stripeToken, navigate]);
 
   return (
     <Container>
@@ -236,7 +256,7 @@ const Cart = () => {
           billingAddress
           shippingAddress
           description = {`Total amount to be paid: ${(cart.total).toFixed(2)} EGP`}
-          amount={cart.total}
+          amount={parseInt(cart.total)}
           token={onToken}
           stripeKey={KEY}
           >

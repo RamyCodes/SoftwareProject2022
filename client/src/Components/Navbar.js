@@ -75,10 +75,12 @@ const Navbar = () => {
   return (
     <Container>
       <Wrapper>
-        <Left>
-
-        </Left>
-        <Center>
+          <Left>
+          <Link style={{color: "black"}} to={`/Order/`}>
+          <MenuItem>YOUR ORDERS</MenuItem>
+          </Link>
+          </Left>
+          <Center>
         <Link style={{color: "black"}} to={`/Home/`}>
           <MenuItem>
           <Logo>Rabbit</Logo>
