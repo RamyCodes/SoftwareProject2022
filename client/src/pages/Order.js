@@ -137,7 +137,7 @@ const Button = styled.button`
 const Cart = () => {
   const cart = useSelector(state => state.cart)
   const [order, setOrder] = useState([]);
-
+  let priceFinal = 0;
   useEffect(()=> {
     axios.get(`http://localhost:5000/api/orders`)
         .then( res => {
@@ -149,6 +149,7 @@ const Cart = () => {
         })
         
     },[])
+
 
   return (
     <Container>
@@ -168,10 +169,10 @@ const Cart = () => {
             <ProductDetail>
               <Details>
               <ProductPrice>
-                  <b>Order ID:</b> {order.token}
+                  <b>Order ID:</b> {order._id}
                   </ProductPrice>
                 <ProductPrice>
-                  <b>Products:</b> {order.products[index].item} ({order.products[index].quantity}) 
+                  <b>Products:</b> {order.products.item} ({order.products.quantity}) 
                   </ProductPrice>
                   <ProductPrice>
                   <b>Shipping address:</b> {order.address}
@@ -189,7 +190,7 @@ const Cart = () => {
           </Product>
           ))}
 
-          {cart.products.map(product=>(<Product>
+          {cart.products.map((product, index)=>(<Product>
             <ProductDetail>
             <Image img src={product.img} />
               <Details>
@@ -213,12 +214,14 @@ const Cart = () => {
           ))}
             <Hr/>
           </Info>
-          {order.map((order, index)=>(
+          
           <Summary>
             <SummaryTitle style={{color: "white"}}>Order Details</SummaryTitle>
             <SummaryItem>
               <SummaryItemText style={{color: "white"}}>Subtotal</SummaryItemText>
-              <SummaryItemPrice style={{color: "white"}}>{order.amount} EGP</SummaryItemPrice>
+              {order.map((order)=>(
+              <SummaryItemPrice style={{color: "white"}}>{priceFinal += order.amount} EGP</SummaryItemPrice>
+              ))}
             </SummaryItem>
             <SummaryItem>
               <SummaryItemText style={{color: "white"}}>Estimated Shipping</SummaryItemText>
@@ -231,13 +234,13 @@ const Cart = () => {
               <SummaryItemText style={{color: "white"}}>Total</SummaryItemText>
               </b>
               <b>
-              <SummaryItemPrice style={{color: "white"}}>{order.amount} EGP</SummaryItemPrice>
+              <SummaryItemPrice style={{color: "white"}}>{priceFinal} EGP</SummaryItemPrice>
               </b>
               
             </SummaryItem>
             <TopButton style={{width: "350px", color: "white", fontSize: 18}} disabled>PAID</TopButton>
           </Summary>
-          ))}
+          
         </Bottom>
       </Wrapper>
     </Container>

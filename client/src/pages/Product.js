@@ -1,4 +1,5 @@
 import React from "react";
+import { ShoppingBasketOutlined } from "@material-ui/icons";
 import styled from "styled-components";
 import Announcement from "../Components/Announcement"
 import Navbar from "../Components/Navbar";
@@ -7,6 +8,8 @@ import { Search, Add, Remove } from "@material-ui/icons";
 import { useState, useEffect } from "react";
 import { addProduct } from "../redux/cartRedux";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router";
+
 
 //document.getElementById("searchTxt").value;
 
@@ -33,12 +36,13 @@ const ImgContainer = styled.div`
   display: flex;
 `;
 
+
 const Image = styled.img`
-  width: 30%;
-  height: 30vh;
-  object-fit: cover;
-  margin-right: 20px;
-  display: flex;
+transition: all 0.5s ease;
+&:hover {
+  background-color: white;
+  transform: scale(1.3);
+}
 `;
 
 const InfoContainer = styled.div`
@@ -95,25 +99,26 @@ function Product(){
   const [quantity, setQuantity] = useState(1);
   const dispatch = useDispatch();
 
+
 const handleClick = () =>{
   setQuantity(1);
   setSearchButton(search.toLowerCase())
 }
 
-const handleCart = ()=>{
-  if(product.length === 0 | product.length > 1)
-  return(alert("Please select a valid product first by searching for it !"));
-  if(!product[0].availability)
+const handleCart = (index)=>{
+  // if(product.length === 0 | product.length > 1)
+  // return(alert("Please select a valid product first by searching for it !"));
+  if(!product[index].availability)
   return(alert("Item is currently not available !"));
   dispatch(
-  addProduct({ product, item: product[0].item, img: product[0].img, price: product[0].price*quantity, quantity, total:  product.forEach.price*quantity})
+  addProduct({ product, item: product[index].item, img: product[index].img, price: product[index].price*quantity, quantity, total:  product.forEach.price*quantity})
   )
   alert("Added to cart successfully !");
 }
 
 const handleQuantity = (type, search) =>{
   if(product.length === 0 | product.length > 1)
-  return(alert("Please select a valid product first by searching for it !"));
+  return(alert("Feature available only in search !"));
   if(!product[0].availability)
   return(alert("Item is currently not available !"));
   if(type === "dec"){
@@ -150,7 +155,7 @@ const handleQuantity = (type, search) =>{
     <Wrapper>
     
       <InfoContainer>
-      <Button id={"AddtoCart-button"} onClick={handleCart} style={{font: "100px",  marginLeft: 600, backgroundColor: "black"}}>ADD TO CART</Button>
+      
        {
               
     <div>
@@ -171,14 +176,14 @@ const handleQuantity = (type, search) =>{
             <Title key={product.price + index +5}> cumulative price: EGP {product.price * quantity} </Title>
           </div>
           <div>
-              <img style={{height: "250px"}} key={product.img} src={product.img}/>
+              <Image id={product.item} onClick={() => handleCart(index)} style={{height: "250px"}} key={product.img} src={product.img}/>
           </div>
         </div>
           <br/>
           <AmountContainer key= {product.img +"Amount"}>
-            <Remove key={product.item + "-remove"} onClick={() => handleQuantity("dec", search)} />
+            <Remove id={product.item + "remove"} key={product.item + "-remove"} onClick={() => handleQuantity("dec", search)} />
             <Amount key={product.item}>{quantity}</Amount>
-            <Add key={product.item+ "-add"} onClick={() => handleQuantity("inc", search)} />
+            <Add id={product.item + "add"} key={product.item+ "-add"} onClick={() => handleQuantity("inc", search)} />
           </AmountContainer>
           <br/>
       </div>)
@@ -193,32 +198,10 @@ const handleQuantity = (type, search) =>{
     </Wrapper>
   </Container>
 
-    // <div>
-    //   <ul>
-    //     {
-    //       product.map(product => <li key = {product._id}>{product.item}</li>)
-    //     }
-    //   </ul>
-    // </div>
       
       
   )
 }
 
-
-    /*
-
-    useEffect(()=>{
-      fetch(
-"http://localhost:5000/api/products?item=")
-            .then((res) => res.json())
-            .then((json) => {
-                this.setState({
-                    items: json,
-                    DataisLoaded: true
-                });
-            })
-    }, [])
-    */
     
 export default Product;
