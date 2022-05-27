@@ -1,7 +1,3 @@
-ITEM,PRICE,AVAILABILITY,,BRAND NAME,,CATEGORY,,,ID
-Pumkin,13.95,1,,NaN,,Fruits & vegetables,,,85ceeabfd36a47e4a75d016a96a4715c
-Black Eggplants,14.95,0,,NaN,,Fruits & vegetables,,,fa12b741d22b11ec82a719991b8924e5
-Smoked Turkey,279.95,1,,Halwani,,Meat & Poultry,,,e285353b5aef4fd7aab42c10bad880cd
-Plain Beef luncheon,134.95,1,,Halwani,,Meat & Poultry,,,858725e714274dfca0d928be8e64af4a
-Ariel Anti-Bacterial Washing Powder - 7kg,179.95,0,,Ariel,,Cleaning & Household,,,c65cb4cd68d24c9cad74491daa0f52e9
-Pledge Furniture Polish - 300 ml,30.5,1,,Pledge,,Cleaning & Household,,,a9f2512b69b840d4aad19cc48e77b0f5
+item,price,availability,brandname,category
+r,14.95,0,NaN,Fruits & vegetables
+

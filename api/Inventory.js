@@ -1,18 +1,10 @@
-require('dotenv').config();
-const express = require('express');
-import axios from "axios"
+const express = require("express");
 
-const app = express();
-
-
-app.get('/', async (req,res) => {
+const Post = require('./models/Product');
+const router = express.Router();
+const csvtojson = require("csvtojson");
 
 
-  const { data } = await axios.get('https://goweather.herokuapp.com/weather/california');
-//   await db.collection('weather').insertOne(data);
 
 
-  return res.send(data);
-});
-
-app.listen(8080);
+module.exports = router;
