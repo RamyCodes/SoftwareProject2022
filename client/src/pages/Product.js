@@ -173,7 +173,7 @@ const handleQuantity = (type, search) =>{
             <Title key={product.price + index +2}>  price: EGP {product.price} </Title>
             <Title key={product.price + index +3}>  availability: {product.availability.toString()} </Title>
             <Title key={product.price + index +4}> category: {product.category} </Title>
-            <Title key={product.price + index +5}> cumulative price: EGP {product.price * quantity} </Title>
+            <Title key={product.price + index +5}> cumulative price: EGP {parseInt(product.price * quantity)} </Title>
           </div>
           <div>
               <Image id={product.item} onClick={() => handleCart(index)} style={{height: "250px"}} key={product.img} src={product.img}/>

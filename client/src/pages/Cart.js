@@ -9,6 +9,8 @@ import { useEffect, useState} from "react";
 import StripeCheckout from "react-stripe-checkout";
 import { userRequest } from "../requestMethods";
 import {useNavigate} from 'react-router-dom';
+import { removeProducts } from "../redux/cartRedux";
+import { useDispatch } from "react-redux";
 
 
 const KEY = process.env.REACT_APP_STRIPE;
@@ -155,6 +157,7 @@ const Cart = () => {
   console.log(stripeToken);
   let address = "";
   let tokken = "";
+  const dispatch = useDispatch();
 
   const createOrder = async () => {
     try {
@@ -183,6 +186,7 @@ const Cart = () => {
         address = res.data.source.address_line1
         console.log(res.data.payment_method)
         createOrder();
+        dispatch(removeProducts());
       } catch(err){
         console.log(err.response);
     }
@@ -223,7 +227,7 @@ const Cart = () => {
                 <ProductAmount>{product.quantity}</ProductAmount>
                 <Remove />
               </ProductAmountContainer>
-              <ProductPrice>{product.price} EGP</ProductPrice>
+              <ProductPrice>{parseInt(product.price)} EGP</ProductPrice>
             </PriceDetail>
           </Product>
           ))}
@@ -233,7 +237,7 @@ const Cart = () => {
             <SummaryTitle>Order Details</SummaryTitle>
             <SummaryItem>
               <SummaryItemText>Subtotal</SummaryItemText>
-              <SummaryItemPrice>{cart.total.toFixed(2)} EGP</SummaryItemPrice>
+              <SummaryItemPrice>{parseInt(cart.total)} EGP</SummaryItemPrice>
             </SummaryItem>
             <SummaryItem>
               <SummaryItemText>Estimated Shipping</SummaryItemText>
@@ -246,7 +250,7 @@ const Cart = () => {
               <SummaryItemText>Total</SummaryItemText>
               </b>
               <b>
-              <SummaryItemPrice>{cart.total.toFixed(2)} EGP</SummaryItemPrice>
+              <SummaryItemPrice>{parseInt(cart.total)} EGP</SummaryItemPrice>
               </b>
               
             </SummaryItem>
@@ -255,8 +259,8 @@ const Cart = () => {
           image=""
           billingAddress
           shippingAddress
-          description = {`Total amount to be paid: ${(cart.total).toFixed(2)} EGP`}
-          amount={parseInt(cart.total)}
+          description = {`Total amount to be paid: ${parseInt(cart.total)} EGP`}
+          amount={Math.round(cart.total)}
           token={onToken}
           stripeKey={KEY}
           >
