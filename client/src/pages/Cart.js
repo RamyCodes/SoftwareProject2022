@@ -11,7 +11,7 @@ import { userRequest } from "../requestMethods";
 import {useNavigate} from 'react-router-dom';
 import { removeProducts } from "../redux/cartRedux";
 import { useDispatch } from "react-redux";
-
+import { createContext } from "react";
 
 const KEY = process.env.REACT_APP_STRIPE;
 
@@ -156,12 +156,21 @@ const Cart = () => {
   };
   console.log(stripeToken);
   let address = "";
-  let tokken = "";
+  let tokken = "ddd";
   const dispatch = useDispatch();
+
+  const verifyCartItems = () => {
+    if(cart.total === 0){
+      let txt = ""
+      window.alert("Your cart is empty ! Redirecting to catalog...")
+      window.location.replace("/product");
+    }
+  }
 
   const createOrder = async () => {
     try {
       const res = await userRequest.post("/orders", {
+        token: tokken,
         products: cart.products.map((item) => ({
           item: item.item,
           quantity: item.quantity,
@@ -170,6 +179,7 @@ const Cart = () => {
         address: address
       });
       console.log("inside create order " + address)
+      console.log("inside create order " + tokken)
     } catch (err){
       console.log(err.response);
   }
@@ -182,12 +192,16 @@ const Cart = () => {
           tokenId: stripeToken.id,
           amount: cart.total * 100,
         });
-        navigate("/success", {state: {stripeData: res.data, products: cart}});
+        alert("Payment Success ! Redirecting to your Orders...")
+        sessionStorage.setItem('currentUser', '1');
+        navigate("/Order", {state: {stripeData: stripeToken.id, products: cart}});
         address = res.data.source.address_line1
-        console.log(res.data.payment_method)
+        tokken = stripeToken.id
+        console.log("response data : " + res.data.id)
         createOrder();
         dispatch(removeProducts());
       } catch(err){
+        alert("Payment failed !")
         console.log(err.response);
     }
     };
@@ -264,11 +278,12 @@ const Cart = () => {
           token={onToken}
           stripeKey={KEY}
           >
-            <TopButton style={{width: "350px", color: "white"}}>CHECKOUT NOW</TopButton>
+            <TopButton onClick={verifyCartItems} style={{width: "350px", color: "white"}}>CHECKOUT NOW</TopButton>
             </StripeCheckout>
           </Summary>
         </Bottom>
       </Wrapper>
+      <TopButton onClick={createOrder} style={{width: "350px", color: "white"}}>Order test</TopButton>
     </Container>
   );
 };

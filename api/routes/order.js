@@ -33,20 +33,51 @@ router.put("/:id", async (req, res) => {
 });
 
 //DELETE
-router.delete("/:id", async (req, res) => {
+router.delete("/", async (req, res) => {
   try {
-    await Order.findByIdAndDelete(req.params.id);
-    res.status(200).json("Order has been deleted...");
+    const deleted = await Order.deleteMany({});
+    res.status(200).json(deleted);
   } catch (err) {
     res.status(500).json(err);
   }
 });
 
+//GET ORDER BY TOKEN
+// router.get("/find", async (req, res) => {
+//   const qToken = req.query.token;
+//   try {
+//     let orders;
+
+//     if (qToken) {
+//       orders = await Order.find({
+//         token: {
+//           $in: [qToken],
+//         },
+//       })
+//     } 
+//     res.status(200).json(orders);
+//   } catch (err) {
+//     res.status(500).json(err);
+//   }
+// });
+
 //GET ALL
 
 router.get("/", async (req, res) => {
-  try {
-    const orders = await Order.find();
+    const qToken = req.query.token;
+    try {
+      let orders;
+  
+      if (qToken) {
+        orders = await Order.find({
+          token: {
+            $in: [qToken],
+          },
+        })
+      }
+      else {
+        orders = await Order.find();
+      } 
     res.status(200).json(orders);
   } catch (err) {
     res.status(500).json(err);

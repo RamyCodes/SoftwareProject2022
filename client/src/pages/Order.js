@@ -2,11 +2,13 @@ import Announcement from "../Components/Announcement";
 import React from 'react'
 import Navbar from "../Components/Navbar";
 import styled from "styled-components";
-import { Add, Remove } from "@material-ui/icons";
+import { Add, CenterFocusStrong, Remove } from "@material-ui/icons";
 import {Link} from 'react-router-dom';
 import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useLocation } from "react-router";
+import { red } from "@material-ui/core/colors";
 
 const Container = styled.div``;
 
@@ -135,11 +137,28 @@ const Button = styled.button`
 `;
 
 const Cart = () => {
+  const location = useLocation();
   const cart = useSelector(state => state.cart)
   const [order, setOrder] = useState([]);
   let priceFinal = 0;
+  const data = location.state?.stripeData;
+
   useEffect(()=> {
-    axios.get(`http://localhost:5000/api/orders`)
+    console.log("currentUser order:" + sessionStorage.getItem('currentUser') );
+    if(sessionStorage.getItem('currentUser') === null){
+      const DeleteOrders = () =>{
+        axios.delete(`http://localhost:5000/api/orders`)
+        .then( res => {
+          console.log(res)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+      }
+      
+      DeleteOrders();
+    }
+    axios.get(`http://localhost:5000/api/orders?token=`)
         .then( res => {
           console.log(res)
           setOrder(res.data)
@@ -151,12 +170,43 @@ const Cart = () => {
     },[])
 
 
+    const test = (sStatus) => {
+      let res = "";
+      if(sStatus == "CANCELLED")
+        res = "";
+      if(sStatus == "CREATED")
+        res = "CREATED";
+      if(sStatus == "PROCESSING")
+        res = "SHIPPED";
+
+      return res;
+    }
+
+    const Cancel = async (orderId, orderStatus) => {
+      if(orderStatus == "CANCELLED")
+      {
+        alert("Order is already cancelled !")
+        return;
+      }
+      await axios.put(`http://localhost:5000/api/orders/${orderId}`, {
+        status : "CANCELLED"
+      })
+      .then((data) => {
+        console.log(data);
+        alert("Order " + orderId + " is now cancelled !");
+        window.location.replace("/order");
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+    }
+
   return (
     <Container>
       <Navbar />
       <Announcement />
       <Wrapper>
-        <Title>Your order</Title>
+        <Title style={{color: "black"}}>Your order</Title>
         <Top>
         <Link style={{color: "white", background: "black"}} to={`/Product`}>
           <TopButton style={{color: "white"}}>GO BACK TO CATALOG</TopButton>
@@ -172,7 +222,7 @@ const Cart = () => {
                   <b>Order ID:</b> {order._id}
                   </ProductPrice>
                 <ProductPrice>
-                  <b>Products:</b> {order.products.item} ({order.products.quantity}) 
+                  <b>First Product:</b> {order.products[0].item} ({order.products[0].quantity}) 
                   </ProductPrice>
                   <ProductPrice>
                   <b>Shipping address:</b> {order.address}
@@ -182,36 +232,24 @@ const Cart = () => {
             <PriceDetail>
               <ProductAmountContainer>
               <ProductPrice>
+              <br></br>
                  <b>Order status: </b> {order.status}
                  </ProductPrice>
               </ProductAmountContainer>
+              <ProductPrice>
+                 <b>Shipping: </b> {test(order.status)}
+                 </ProductPrice>
+                 <br></br>
               <ProductPrice> <b>Order price: </b> {order.amount} EGP</ProductPrice>
+              <div>
+              <TopButton id={order._id} onClick={() => Cancel(order._id, order.status)} style={{height: "70px", backgroundColor: "red", marginTop: "10px", marginBottom: "10px", width: "120px", color: "white", fontSize: 18, marginRight: "10px"}} >CANCEL</TopButton>
+              <TopButton id={order._id + "return"} style={{height: "70px", backgroundColor: "red", marginTop: "10px", marginBottom: "10px", width: "120px", color: "white", fontSize: 18, marginRight: "10px"}} >RETURN</TopButton>
+              </div>
             </PriceDetail>
+            
           </Product>
           ))}
 
-          {cart.products.map((product, index)=>(<Product>
-            <ProductDetail>
-            <Image img src={product.img} />
-              <Details>
-                <ProductName>
-                  <b>Product:</b> {product.item}
-                </ProductName>
-                <ProductSize>
-                  <b>Quantity:</b> {product.quantity}
-                </ProductSize>
-              </Details>
-            </ProductDetail>
-            <PriceDetail>
-              <ProductAmountContainer>
-                <Add />
-                <ProductAmount>{product.quantity}</ProductAmount>
-                <Remove />
-              </ProductAmountContainer>
-              <ProductPrice>{product.price} EGP</ProductPrice>
-            </PriceDetail>
-          </Product>
-          ))}
             <Hr/>
           </Info>
           
