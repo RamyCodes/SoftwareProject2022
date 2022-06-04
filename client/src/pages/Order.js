@@ -142,22 +142,24 @@ const Cart = () => {
   const [order, setOrder] = useState([]);
   let priceFinal = 0;
   const data = location.state?.stripeData;
+  const email = sessionStorage.getItem('email');
+  console.log(email)
 
   useEffect(()=> {
-    console.log("currentUser order:" + sessionStorage.getItem('currentUser') );
-    if(sessionStorage.getItem('currentUser') === null){
-      const DeleteOrders = () =>{
-        axios.delete(`http://localhost:5000/api/orders`)
-        .then( res => {
-          console.log(res)
-        })
-        .catch(err => {
-          console.log(err)
-        })
-      }
+    // console.log("currentUser order:" + sessionStorage.getItem('currentUser') );
+    // if(sessionStorage.getItem('currentUser') === null){
+    //   const DeleteOrders = () =>{
+    //     axios.delete(`http://localhost:5000/api/orders`)
+    //     .then( res => {
+    //       console.log(res)
+    //     })
+    //     .catch(err => {
+    //       console.log(err)
+    //     })
+    //   }
       
-      DeleteOrders();
-    }
+    //   DeleteOrders();
+    // }
     axios.get(`http://localhost:5000/api/orders?token=`)
         .then( res => {
           console.log(res)
@@ -169,23 +171,96 @@ const Cart = () => {
         
     },[])
 
+    const handleOrder = (oStatus, orderId, shippingStatus) => {
+      let res = "PROCESSING"
+      if(oStatus === "FULLFILLED" || oStatus === "FULL"){
+        res = "FULLFILLED"
+      }
+      if(oStatus === "delivered"){
+        axios.put(`http://localhost:5000/api/orders/${orderId}`, {
+        status : "FULLFILLED"
+      })
+      }
+      if(oStatus === "CANCELLED"){
+        res = "CANCELLED"
+      }
+      if(oStatus === "PROCESSING"){
+        const times = async () =>{
+         setTimeout(res = "PROCESSING", 1000)
+        }
+        times()
+      }
+      if(oStatus === "shipped"){
+        res = "PROCESSING"
+      }
+      if(shippingStatus === "SHIPPED"){
+        res = "PROCESSING"
+        axios.put(`http://localhost:5000/api/orders/${orderId}`, {
+        status : "delivered"
+      })
+      }
+      if(shippingStatus === "CREATED"){
+        axios.put(`http://localhost:5000/api/orders/${orderId}`, {
+        status : "shipped"
+      })
+        res = "PROCESSING"
+      }
+      if(oStatus === "CREATED"){
+        res = "CREATED"
+        axios.put(`http://localhost:5000/api/orders/${orderId}`, {
+        status : "PROCESSING"
+      })
+      }
+      return res;
+    }
 
     const test = (sStatus) => {
       let res = "";
       if(sStatus == "CANCELLED")
         res = "";
       if(sStatus == "CREATED")
-        res = "CREATED";
+        res = "";
       if(sStatus == "PROCESSING")
-        res = "SHIPPED";
-
+        res = "CREATED";
+      if(sStatus == "shipped")
+        setTimeout(res = "SHIPPED", 5000)
+      if(sStatus == "delivered")
+        setTimeout(res = "DELIVERED", 500)
+      if(sStatus == "FULLFILLED")
+        res = "DELIVERED";
+      if(sStatus == "FULL")
+        res = "RETURNED";
       return res;
+    }
+
+    const Return = (orderStatus, shippingStatus, orderId) => {
+      console.log(orderStatus, shippingStatus)
+      if(orderStatus === "delivered" && shippingStatus === "DELIVERED"){
+        alert("Order return for order id " + orderId +" requested !")
+        axios.put(`http://localhost:5000/api/orders/${orderId}`, {
+          status : "FULL"
+        })
+        window.location.replace("/order");
+      }
+      else{
+        alert("You can't return the order after it was fullfilled !")
+      }
     }
 
     const Cancel = async (orderId, orderStatus) => {
       if(orderStatus == "CANCELLED")
       {
         alert("Order is already cancelled !")
+        return;
+      }
+      if(orderStatus == "FULLFILLED" || orderStatus == "FULL")
+      {
+        alert("You can't cancel now, order is already fullfilled !")
+        return;
+      }
+      if(test(orderStatus) == "SHIPPED")
+      {
+        alert("You can't cancel now, order is already shipped !")
         return;
       }
       await axios.put(`http://localhost:5000/api/orders/${orderId}`, {
@@ -233,7 +308,7 @@ const Cart = () => {
               <ProductAmountContainer>
               <ProductPrice>
               <br></br>
-                 <b>Order status: </b> {order.status}
+                 <b>Order status: </b> {handleOrder(order.status, order._id, test(order.status))}
                  </ProductPrice>
               </ProductAmountContainer>
               <ProductPrice>
@@ -243,7 +318,7 @@ const Cart = () => {
               <ProductPrice> <b>Order price: </b> {order.amount} EGP</ProductPrice>
               <div>
               <TopButton id={order._id} onClick={() => Cancel(order._id, order.status)} style={{height: "70px", backgroundColor: "red", marginTop: "10px", marginBottom: "10px", width: "120px", color: "white", fontSize: 18, marginRight: "10px"}} >CANCEL</TopButton>
-              <TopButton id={order._id + "return"} style={{height: "70px", backgroundColor: "red", marginTop: "10px", marginBottom: "10px", width: "120px", color: "white", fontSize: 18, marginRight: "10px"}} >RETURN</TopButton>
+              <TopButton id={order._id + "return"} onClick={() => Return(order.status, test(order.status), order._id)} style={{height: "70px", backgroundColor: "red", marginTop: "10px", marginBottom: "10px", width: "120px", color: "white", fontSize: 18, marginRight: "10px"}} >RETURN</TopButton>
               </div>
             </PriceDetail>
             

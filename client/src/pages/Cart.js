@@ -157,6 +157,7 @@ const Cart = () => {
   console.log(stripeToken);
   let address = "";
   let tokken = "ddd";
+  let email = "";
   const dispatch = useDispatch();
 
   const verifyCartItems = () => {
@@ -197,7 +198,9 @@ const Cart = () => {
         navigate("/Order", {state: {stripeData: stripeToken.id, products: cart}});
         address = res.data.source.address_line1
         tokken = stripeToken.id
-        console.log("response data : " + res.data.id)
+        email = stripeToken.email
+        sessionStorage.setItem('email', email)
+        console.log("response email data : " + email)
         createOrder();
         dispatch(removeProducts());
       } catch(err){
