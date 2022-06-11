@@ -293,9 +293,11 @@ const Cart = () => {
           billingAddress
           shippingAddress
           description = {`Total amount to be paid: ${parseInt(cart.total)} EGP`}
-          amount={Math.round(cart.total)}
+          currency= "EGP"
+          amount={parseInt(cart.total)*100}
           token={onToken}
           stripeKey={KEY}
+          
           >
             <TopButton onClick={() => {verifyCartItems()}} style={{width: "350px", color: "white"}}>CHECKOUT NOW</TopButton>
             </StripeCheckout>
