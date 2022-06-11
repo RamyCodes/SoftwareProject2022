@@ -65,10 +65,10 @@ import {
     }
   `;
   
-  const Product = ({ item }) => {
+  const Product = ({ name }) => {
     return (
       <Container>
-        <Image src={item.img} />
+        <Image src={name.image} />
         <Info>
           <Icon>
             <Link to={`/product`}>

@@ -34,10 +34,10 @@ const Products = ({ cat, filters, sort }) => {
     <Container>
           <h1 style={{color: "white"}}>Top products</h1>
       {cat
-        ? filteredProducts.map((item) => <Product item={item} key={item.id} />)
+        ? filteredProducts.map((name) => <Product name={name} key={name.id} />)
         : products
             .slice(0,3)
-            .map((item) => <Product item={item} key={item.id} />)}
+            .map((name) => <Product name={name} key={name.id} />)}
     </Container>
   );
 };
