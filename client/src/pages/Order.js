@@ -10,6 +10,8 @@ import axios from "axios";
 import { useLocation } from "react-router";
 import { red } from "@material-ui/core/colors";
 
+
+
 const Container = styled.div``;
 
 const Wrapper = styled.div`
@@ -179,10 +181,13 @@ const Cart = () => {
       if(oStatus === "delivered"){
         axios.put(`http://localhost:5000/api/orders/${orderId}`, {
         status : "FULLFILLED"
+        
       })
+      
       }
       if(oStatus === "CANCELLED"){
         res = "CANCELLED"
+        
       }
       if(oStatus === "PROCESSING"){
         const times = async () =>{
@@ -192,12 +197,14 @@ const Cart = () => {
       }
       if(oStatus === "shipped"){
         res = "PROCESSING"
+
       }
       if(shippingStatus === "SHIPPED"){
         res = "PROCESSING"
         axios.put(`http://localhost:5000/api/orders/${orderId}`, {
         status : "delivered"
       })
+      .then(axios.get('http://localhost:5000/api/shipped'))
       }
       if(shippingStatus === "CREATED"){
         axios.put(`http://localhost:5000/api/orders/${orderId}`, {
@@ -209,6 +216,7 @@ const Cart = () => {
         res = "CREATED"
         axios.put(`http://localhost:5000/api/orders/${orderId}`, {
         status : "PROCESSING"
+        
       })
       }
       return res;
@@ -224,8 +232,10 @@ const Cart = () => {
         res = "CREATED";
       if(sStatus == "shipped")
         setTimeout(res = "SHIPPED", 5000)
-      if(sStatus == "delivered")
-        setTimeout(res = "DELIVERED", 500)
+      if(sStatus == "delivered"){
+        res = "DELIVERED"
+        axios.get('http://localhost:5000/api/delivered')
+      }
       if(sStatus == "FULLFILLED")
         res = "DELIVERED";
       if(sStatus == "FULL")
@@ -240,6 +250,7 @@ const Cart = () => {
         axios.put(`http://localhost:5000/api/orders/${orderId}`, {
           status : "FULL"
         })
+        .then(axios.get("http://localhost:5000/api/returned"))
         window.location.replace("/order");
       }
       else{
@@ -266,6 +277,8 @@ const Cart = () => {
       await axios.put(`http://localhost:5000/api/orders/${orderId}`, {
         status : "CANCELLED"
       })
+      .then(axios.get("http://localhost:5000/api/cancelled"))
+
       .then((data) => {
         console.log(data);
         alert("Order " + orderId + " is now cancelled !");
