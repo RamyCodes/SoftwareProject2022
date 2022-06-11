@@ -165,7 +165,19 @@ const Cart = () => {
       let txt = ""
       window.alert("Your cart is empty ! Redirecting to catalog...")
       window.location.replace("/product");
+      return;
     }
+  }
+
+  const reduceStock = (id, stock, quantity) =>{
+    let count = stock - quantity;
+    try {
+      const res = userRequest.put(`/products/${id}`, {
+        stock: count,
+      });
+    } catch (err){
+      console.log(err.response);
+  }
   }
 
   const createOrder = async () => {
@@ -201,6 +213,10 @@ const Cart = () => {
         email = stripeToken.email
         sessionStorage.setItem('email', email)
         console.log("response email data : " + email)
+        for (let i = 0; i < cart.products.length; i++) {
+          // console.log(cart.products, cart.products[i]?.stock, cart.products[i]?.quantity)
+          reduceStock(cart.products[i].id, cart.products[i]?.stock, cart.products[i]?.quantity);
+          }
         createOrder();
         dispatch(removeProducts());
       } catch(err){
@@ -228,10 +244,10 @@ const Cart = () => {
 
           {cart.products.map(product=>(<Product>
             <ProductDetail>
-            <Image img src={product.img} />
+            <Image img src={product.image} />
               <Details>
                 <ProductName>
-                  <b>Product:</b> {product.item}
+                  <b>Product:</b> {product.name}
                 </ProductName>
                 <ProductSize>
                   <b>Quantity:</b> {product.quantity}
@@ -281,7 +297,7 @@ const Cart = () => {
           token={onToken}
           stripeKey={KEY}
           >
-            <TopButton onClick={verifyCartItems} style={{width: "350px", color: "white"}}>CHECKOUT NOW</TopButton>
+            <TopButton onClick={() => {verifyCartItems()}} style={{width: "350px", color: "white"}}>CHECKOUT NOW</TopButton>
             </StripeCheckout>
           </Summary>
         </Bottom>

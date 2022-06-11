@@ -10,7 +10,7 @@ const router = require("express").Router();
 router.post('/add', async (req, res) => {
 
 	csvtojson()
-		.fromFile("Products.csv")
+		.fromFile("ProductsOrig.csv")
 		.then(csvData => {
 			console.log(csvData);
 			Product.insertMany(csvData).then(function () {
@@ -41,15 +41,15 @@ router.put("/:id", async (req, res) => {
 //GET ALL PRODUCTS
 router.get("/", async (req, res) => {
   const qCategory = req.query.category;
-  var qItem = req.query.item;
+  var qName = req.query.name;
 
   try {
     let products;
 
-    if (qItem) {
+    if (qName) {
       products = await Product.find({
-        item: {
-          $in: [qItem],
+        name: {
+          $in: [qName],
         },
         
       })}

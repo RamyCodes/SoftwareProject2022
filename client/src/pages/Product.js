@@ -102,35 +102,39 @@ function Product(){
 
 const handleClick = () =>{
   setQuantity(1);
-  setSearchButton(search.toLowerCase())
+  setSearchButton(search);
 }
 
 const handleCart = (index)=>{
-  // if(product.length === 0 | product.length > 1)
-  // return(alert("Please select a valid product first by searching for it !"));
-  if(!product[index].availability)
+
+  if(product[index].stock < 1)
   return(alert("Item is currently not available !"));
   dispatch(
-  addProduct({ product, item: product[index].item, img: product[index].img, price: product[index].price*quantity, quantity, total:  product.forEach.price*quantity})
+  addProduct({ product, id: product[index]._id, stock: product[index].stock, name: product[index].name, image: product[index].image, price: product[index].price*quantity, quantity, total:  product.forEach.price*quantity})
   )
   alert("Added to cart successfully !");
 }
 
+
+
 const handleQuantity = (type, search) =>{
   if(product.length === 0 | product.length > 1)
   return(alert("Feature available only in search !"));
-  if(!product[0].availability)
+  if(product[0].stock === 0)
   return(alert("Item is currently not available !"));
   if(type === "dec"){
    quantity > 1 && setQuantity(quantity - 1);
   }
-  else{
+  else if(quantity < product[0].stock){
     setQuantity(quantity + 1);
+  }
+  else{
+    alert(`Only ${product[0].stock} of this product left !`)
   }
 }
 
   useEffect(()=> {
-    axios.get(`http://localhost:5000/api/products?item=${searchButton}`)
+    axios.get(`http://localhost:5000/api/products?name=${searchButton}`)
         .then( res => {
           console.log(res)
           setProduct(res.data)
@@ -169,21 +173,23 @@ const handleQuantity = (type, search) =>{
             <br/><br/><h1> Product {index +1}</h1><br/>
         <div style={{display: "flex", justifyContent: "space-between"}}> 
           <div>
-            <Title key={product.item}>   name: {product.item} </Title>
+            <Title key={product.name}>   name: {product.name} </Title>
             <Title key={product.price + index +2}>  price: EGP {product.price} </Title>
-            <Title key={product.price + index +3}>  availability: {product.availability.toString()} </Title>
+            <Title key={product.price + index +3}>  stock: {product.stock} </Title>
             <Title key={product.price + index +4}> category: {product.category} </Title>
-            <Title key={product.price + index +5}> cumulative price: EGP {parseInt(product.price * quantity)} </Title>
+            <Title key={product.price + index +5}> weight: {product.weight} </Title>
+            <Title key={product.price + index +6}> measurement: {product.measurement} </Title>
+            <Title key={product.price + index +7}> cumulative price: EGP {parseInt(product.price * quantity)} </Title>
           </div>
           <div>
-              <Image id={product.item} onClick={() => handleCart(index)} style={{height: "250px"}} key={product.img} src={product.img}/>
+              <Image id={product.name} onClick={() => handleCart(index)} style={{height: "250px"}} key={product.image} src={product.image}/>
           </div>
         </div>
           <br/>
-          <AmountContainer key= {product.img +"Amount"}>
-            <Remove id={product.item + "remove"} key={product.item + "-remove"} onClick={() => handleQuantity("dec", search)} />
-            <Amount key={product.item}>{quantity}</Amount>
-            <Add id={product.item + "add"} key={product.item+ "-add"} onClick={() => handleQuantity("inc", search)} />
+          <AmountContainer key= {product.image +"Amount"}>
+            <Remove id={product.name + "remove"} key={product.name + "-remove"} onClick={() => handleQuantity("dec", search)} />
+            <Amount key={product.name}>{quantity}</Amount>
+            <Add id={product.name + "add"} key={product.name+ "-add"} onClick={() => handleQuantity("inc", search)} />
           </AmountContainer>
           <br/>
       </div>)
