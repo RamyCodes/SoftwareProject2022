@@ -65,6 +65,7 @@ router.delete("/", async (req, res) => {
 
 router.get("/", async (req, res) => {
     const qToken = req.query.token;
+    const qStatus = req.query.status;
     try {
       let orders;
   
@@ -72,6 +73,13 @@ router.get("/", async (req, res) => {
         orders = await Order.find({
           token: {
             $in: [qToken],
+          },
+        })
+      }
+      if (qStatus) {
+        orders = await Order.find({
+          status: {
+            $in: [qStatus],
           },
         })
       }
