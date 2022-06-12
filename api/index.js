@@ -7,6 +7,7 @@ const userRoute = require("./routes/user");
 const productRoute = require("./routes/product");
 const stripeRoute = require("./routes/stripe");
 const orderRoute = require("./routes/order");
+const shippingRoute = require("./routes/shipping");
 const cors = require("cors");
 
 
@@ -50,6 +51,7 @@ app.use(express.json());
 app.use("/api/users", userRoute);
 app.use("/api/products", productRoute);
 app.use("/api/orders", orderRoute);
+app.use("/api/shippings", shippingRoute);
 app.use("/api/checkout", stripeRoute);
 
 
